@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-python-app
+  namespace: production  # Specify your namespace here
+  labels:
+    app: my-python-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-python-app
+  template:
+    metadata:
+      labels:
+        app: my-python-app
+    spec:
+      containers:
+      - name: my-python-app
+        image: colorcicd.azurecr.io/color:$(Build.BuildId)
+        ports:
+        - containerPort: 80
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-python-app-service
+  namespace: production  # Specify your namespace here
+spec:
+  type: LoadBalancer
+  selector:
+    app: my-python-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
