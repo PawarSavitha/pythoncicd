@@ -1,9 +1,17 @@
-from termcolor import colored
+from flask import Flask
 
-def main():
-    print(colored('Hello, World!', 'red'))
-    print(colored('This is a green text.', 'green'))
-    print(colored('This text is blue and underlined.', 'blue', attrs=['underline']))
+app = Flask(__name__)
 
-if __name__ == "__main__":
-    main()
+@app.route('/')
+def hello_world():
+    return """
+    <html>
+        <body>
+            <p style="color:green;">Hello, World!</p>
+            <p style="color:blue; text-decoration:underline;">This text is blue and underlined.</p>
+        </body>
+    </html>
+    """
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80)
